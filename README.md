@@ -32,7 +32,7 @@ Ferramenta profissional para gerenciamento SSH/SCP
 
 🚀 Fast remote command execution
 
-### ⚙️ Instalação
+### ⚙️ Installation
 ```bash
 sudo apt-get install figlet
 git clone https://github.com/Laila19/DefacementXP.git
