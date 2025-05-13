@@ -10,13 +10,8 @@ chmod +x defacementxp.sh
 ```
 ### 📌 Requirements
 figlet (for banner display)
-
 SSH/SCP client tools
-
-DefacementXP - Painel Avançado de Gerenciamento Web
-(por Laila19)
-
-Ferramenta profissional para gerenciamento SSH/SCP
+Professional management tool SSH/SCP
 
 ### 🔹 Features
 
