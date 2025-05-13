@@ -26,7 +26,7 @@ print(f"{MAGENTA}")
 os.system('figlet -f slant "DefacementXP"')
 print(f"{NC}")
 
-PASSWORD = "supersecret"
+PASSWORD = "ACESSCYPHERXP"
 input_password = getpass.getpass(f"{YELLOW}Enter password to access panel: {NC}")
 
 if input_password != PASSWORD:
