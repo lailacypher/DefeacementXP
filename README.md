@@ -5,8 +5,8 @@
 
 ### 🛠️ Usage
 ```bash
-chmod +x defacementxp.sh
-./defacementxp.sh
+chmod +x DefeacementXP.py
+sudo python3 DefeacementXP.py
 ```
 ### 📌 Requirements
 figlet (for banner display)
