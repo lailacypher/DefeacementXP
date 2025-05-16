@@ -1,0 +1,8 @@
+requests==2.31.0
+beautifulsoup4==4.12.2
+paramiko==3.4.0
+scp==0.14.5
+socks5==0.1.0
+colorama==0.4.6
+python-nmap==0.7.1
+sshpass==1.0
